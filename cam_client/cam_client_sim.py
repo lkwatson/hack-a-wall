@@ -20,8 +20,8 @@ while True:
                             {'person_id': 'Tommy', 'x': x_2, 'y': y_2}
                          ]))
     else:
-        x_1 = (25*math.sin(i/100) + 75)
-        y_1 = (10*math.cos(i/80) + 8)
+        x_1 = (25*math.sin(i/100.) + 75)
+        y_1 = (10*math.cos(i/80.) + 8)
         sock_client.emit('messages',
                          json.dumps([
                             {'person_id': 'Billy', 'x': x_1, 'y': y_1},

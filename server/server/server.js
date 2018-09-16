@@ -114,9 +114,7 @@ io.on('connection', function(client) {
     });
 
     client.on('messages', function(data) {
-      console.log(data)
   		var jsonArr = JSON.parse(data);
-      console.log(jsonArr)
   		for (i = 0; i < jsonArr.length; i++) {
   			var person = jsonArr[i];
   			if (person.person_id in response) {
@@ -131,8 +129,8 @@ io.on('connection', function(client) {
   			}
   		}
   		console.log(response);
-  		//client.emit('broad', response);
-  		//client.broadcast.emit('broad', response);
+  		client.emit('broad', response);
+  		client.broadcast.emit('broad', response);
     });
 
 });
