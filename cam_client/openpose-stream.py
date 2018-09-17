@@ -20,7 +20,7 @@ HEAD_I = 0
 LEFT_I = 7
 RIGHT_I = 4
 
-sock_client = SocketIO('localhost', 3000, LoggingNamespace)
+sock_client = SocketIO('142.93.187.243', 3000, LoggingNamespace)
 
 params = dict()
 params["render_pose"] = False
