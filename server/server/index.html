@@ -1,17 +1,105 @@
 <!doctype html>  
 <html lang="en">  
     <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
+        <style>
+        h1, h2, h3, h4 {
+            font-family: 'Roboto Slab', serif;
+        }
+        p {
+            font-family: 'Roboto', sans-serif;
+        }
 
+        .smooth {
+            transition: all 0.8s ease-out;
+        }
+
+        .per_img {
+            width: 300px;
+            height: 300px;
+        }
+
+        #sara {
+            animation: lyft-comes 30s 1;
+            opacity: 0.0;
+        }
+
+        #news {
+            position: absolute;
+            top: 5%;
+            left: 60%;
+            width: 300px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            opacity: 0.0;
+            transition: all 0.8s ease-out;
+            animation: hide-news 30s 1;
+        }
+
+        #news-article {
+            background-color: #ddd;
+            padding: 10px 20px;
+        }
+
+        #news-heading {
+            background-color: #eee;
+            padding: 15px 20px;
+            border-bottom: 2px solid #333;
+        }
+
+        /*@keyframes lyft-comes {
+          0%   { height: 300px; width: 300px; opacity: 1.0; }
+          80%   { height: 300px; width: 300px; opacity: 1.0; }
+          98% { height: 800px; width: 800px; opacity: 1.0; }
+          100% { opacity: 0.0; }
+        }*/
+
+        @keyframes lyft-comes {
+          0%   { transform: scale(1, 1); opacity: 1.0; }
+          80%   { transform: scale(1, 1); opacity: 1.0; }
+          98% { transform: scale(2, 2); opacity: 1.0; }
+          100% { opacity: 0.0; }
+        }
+
+        @keyframes hide-news {
+          0%   { opacity: 1.0; }
+          80%   { opacity: 1.0; }
+          98% { opacity: 1.0; }
+          100% { opacity: 0.0; }
+        }
+
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <!-- <h1>Hello World!</h1>
         <div id="future"></div>
         <form id="form" id="chat_form">
             <input id="chat_input" type="text">
             <input type="submit" value="Send">
-        </form>
-         <script src="/jquery/dist/jquery.js"></script>
-         <script src="/socket.io/socket.io.js"></script>
+        </form> -->
+		<img id="RedSox" style="position:absolute; top:0px" src="https://pbs.twimg.com/profile_images/1017137076863676418/Q0lomPjR_400x400.jpg">
+		<video id="RedSoxVideo" controls autoplay="true" autoplay="true" muted="muted" loop>
+		  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+		  <source src="https://www.w3schools.com/html/mov_bbb.webm" type="video/webm">
+		  <p>Your browser doesn't support HTML5 video. Here is
+		     a <a href="myVideo.mp4">link to the video</a> instead.</p>
+		</video>
+
+        <div id="news">
+            <div id="news-heading">
+                <h2>Kim Janey seeks gentrification hearing for hard-hit Roxbury</h2>
+            </div>
+            <div id="news-article">
+                <h3><strong>Boston Herald</strong> - Sept 12th, 2018</h3>
+                <p>District 7 City Councilor Kim Janey is advocating a city-funded voucher program for housing as a response to gentrification and displacement in Roxbury.
+                </p><p>
+                Janey will submit an order for a hearing on gentrification during today’s City Council meeting.
+                </p>
+            </div>
+        </div>
+
+     <script src="/jquery/dist/jquery.js"></script>
+     <script src="/socket.io/socket.io.js"></script>
     </body>
 </html>
 
@@ -20,8 +108,81 @@
  socket.on('connect', function(data) {
 	 socket.emit('join', 'Hello World from client');
  });
+ 
+var old_data = {}
+ $("#RedSoxVideo").get(0).play();
+ 
  socket.on('broad', function(data) {
-	 $('#future').append(data+ "<br/>");
+	 
+	 for (var person_id in old_data) {
+		 if (!data.hasOwnProperty(person_id)) {
+		 	$('#' + person_id).remove();
+			$('#' + person_id + '-hand1').remove();
+			$('#' + person_id + '-hand2').remove();
+		 }
+	 }
+
+     var people = 0
+     var avg_x = 0
+
+	 for (var person_id in data) {
+        people++;
+
+		 if (!old_data.hasOwnProperty(person_id)) {
+			 var img = $('<img id="' + person_id + '" style="position:absolute; top:50px">');
+			 var img_hand1 = $('<img id="' + person_id + '-hand1" style="position:absolute; top:50px; z-index:1; height:50px; width:50px">');
+			 var img_hand2 = $('<img id="' + person_id + '-hand2" style="position:absolute; top:50px; z-index:1; height:50px; width:50px">');
+			 img.appendTo('body');
+			 img_hand1.appendTo('body');
+			 img_hand2.appendTo('body');
+		 }
+         avg_x += data[person_id]['x']
+		 $('#' + person_id).attr("src", data[person_id]['avatar']);
+		 $('#' + person_id).css({ top: data[person_id]['y'] + "%", left: data[person_id]['x'] + "%"});
+         $('#' + person_id).addClass("smooth");
+         $('#' + person_id).addClass("per_img");
+
+		 if (typeof data[person_id]['hand1_x'] != "undefined" && typeof data[person_id]['hand1_y'] != "undefined") {
+			 $('#' + person_id + "-hand1").attr("src", "images/hand.svg");
+			 $('#' + person_id + "-hand1").css({ top: data[person_id]['hand1_y'] + "%", left: data[person_id]['hand1_x'] + "%"});
+             $('#' + person_id + "-hand1").addClass("smooth");
+             $('#' + person_id + "-hand1").show();
+		 } else {
+			 $('#' + person_id + "-hand1").hide();
+		 }
+		 
+		 if (typeof data[person_id]['hand2_x'] != "undefined" && typeof data[person_id]['hand2_y'] != "undefined") {
+			 $('#' + person_id + "-hand2").attr("src", "images/hand.svg")
+			 $('#' + person_id + "-hand2").css({ top: data[person_id]['hand2_y'] + "%", left: data[person_id]['hand2_x'] + "%"});
+             $('#' + person_id + "-hand2").addClass("smooth");
+             $('#' + person_id + "-hand2").show();
+		 } else {
+			 $('#' + person_id + "-hand2").hide();
+		 }
+		 
+		 if (data[person_id]['hand1_x'] > 15 && $("#RedSoxVideo").is(':visible')) {
+			 console.log("bye");
+			 $("#RedSoxVideo" ).fadeOut( "fast");
+			 $("#RedSox" ).fadeIn( "fast");
+			 // $("#Tommy").animate({width: "700px", height: "400px"}, 3000);
+		 } else if (data[person_id]['hand1_x'] < 15 && !$("#RedSoxVideo").is(':visible')){
+			 console.log("hi");
+			 $("#RedSox" ).fadeOut( "fast");
+			 $("#RedSoxVideo" ).fadeIn( "fast");			//
+			// $("#Eric").animate({width: "500px", height: "500px"}, 3000);
+		 }
+	 }
+
+     avg_x = avg_x / people
+
+     if (people > 1) {
+        $('#news').css({opacity: 1.0});
+        $('#news').css({left: avg_x + "%"});
+     }else{
+        $('#news').css({opacity: 0.0});
+     }
+
+	 old_data = data;
  });
 
  $('form').submit(function(e){
