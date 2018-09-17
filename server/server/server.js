@@ -116,6 +116,10 @@ io.on('connection', function(client) {
 
     client.on('messages', function(data) {
 		var jsonArr = JSON.parse(data);
+
+    if (jsonArr.length == 0) {
+      response = {}
+    }
 		for (i = 0; i < jsonArr.length; i++) {
 			var person = jsonArr[i];
 			if (!response.hasOwnProperty(person.person_id)) {
