@@ -119,7 +119,7 @@
 </html>
 
 <script>  
- var socket = io.connect('http://localhost:3000');
+ var socket = io.connect('http://142.93.187.243:3000');
  socket.on('connect', function(data) {
 	 socket.emit('join', 'Hello World from client');
  });
