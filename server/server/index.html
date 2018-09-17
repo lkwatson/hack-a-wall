@@ -68,9 +68,24 @@
           100% { display: none; }
         }
 
+        body:before {
+          content: '';
+          position: fixed;
+          width: 100vw;
+          height: 100vh;
+
+          background-image: url("https://images.pexels.com/photos/1070945/pexels-photo-1070945.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+          background-size: cover;
+          filter: blur(4px);
+        }
+
         </style>
     </head>
     <body>
+    <div id="everything">
         <!-- <h1>Hello World!</h1>
         <div id="future"></div>
         <form id="form" id="chat_form">
@@ -97,14 +112,14 @@
                 </p>
             </div>
         </div>
-
+     </div>
      <script src="/jquery/dist/jquery.js"></script>
      <script src="/socket.io/socket.io.js"></script>
     </body>
 </html>
 
 <script>  
- var socket = io.connect('http://142.93.187.243:3000');
+ var socket = io.connect('http://localhost:3000');
  socket.on('connect', function(data) {
 	 socket.emit('join', 'Hello World from client');
  });
@@ -162,7 +177,7 @@ var old_data = {}
 			 $('#' + person_id + "-hand2").hide();
 		 }
 		 
-         if (data[person_id]['hand1_x'] < 15 && debounce < 0){
+     if (data[person_id]['hand1_x'] < 15 && debounce < 0){
 			 debounce = 20;
 			 $("#RedSox" ).fadeOut( "fast");
 			 $("#RedSoxVideo" ).fadeIn( "fast");
