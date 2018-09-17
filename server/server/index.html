@@ -62,10 +62,10 @@
         }
 
         @keyframes hide-news {
-          0%   { opacity: 1.0; }
-          80%   { opacity: 1.0; }
-          98% { opacity: 1.0; }
-          100% { opacity: 0.0; }
+          0%   { display: block; }
+          80%   { display: block; }
+          98% { display: block; }
+          100% { display: none; }
         }
 
         </style>
@@ -104,13 +104,15 @@
 </html>
 
 <script>  
- var socket = io.connect('http://142.93.187.243:3000');
+ var socket = io.connect('http://localhost:3000');
  socket.on('connect', function(data) {
 	 socket.emit('join', 'Hello World from client');
  });
  
 var old_data = {}
  $("#RedSoxVideo").get(0).play();
+
+ var debounce = 0
  
  socket.on('broad', function(data) {
 	 
@@ -160,18 +162,15 @@ var old_data = {}
 			 $('#' + person_id + "-hand2").hide();
 		 }
 		 
-		 if (data[person_id]['hand1_x'] > 15 && $("#RedSoxVideo").is(':visible')) {
-			 console.log("bye");
-			 $("#RedSoxVideo" ).fadeOut( "fast");
-			 $("#RedSox" ).fadeIn( "fast");
-			 // $("#Tommy").animate({width: "700px", height: "400px"}, 3000);
-		 } else if (data[person_id]['hand1_x'] < 15 && !$("#RedSoxVideo").is(':visible')){
-			 console.log("hi");
+         if (data[person_id]['hand1_x'] < 15 && debounce < 0){
+			 debounce = 20;
 			 $("#RedSox" ).fadeOut( "fast");
-			 $("#RedSoxVideo" ).fadeIn( "fast");			//
+			 $("#RedSoxVideo" ).fadeIn( "fast");
 			// $("#Eric").animate({width: "500px", height: "500px"}, 3000);
 		 }
 	 }
+
+     debounce += -1;
 
      avg_x = avg_x / people
 

@@ -97,9 +97,9 @@ server.listen(3000, () => {
 })
 
 avatarIndex = 0;
-avatars = ["https://cdn0.iconfinder.com/data/icons/cute-animal-avatar-1/247/bird-512.png",
-"https://cdn0.iconfinder.com/data/icons/cute-animal-avatar-1/241/pig-512.png",
-"https://cdn0.iconfinder.com/data/icons/cute-animal-avatar-1/246/dog-512.png",
+avatars = ["https://cdn.shopify.com/s/files/1/1061/1924/files/Panda_Face_Emoji.png?9898922749706957214",
+"http://cdn.shopify.com/s/files/1/1061/1924/products/Dog_Emoji_grande.png?v=1480481035",
+"http://cdn.shopify.com/s/files/1/1061/1924/products/CAT_emoji_icon_png_grande.png?v=1480481026",
 "https://cdn0.iconfinder.com/data/icons/cute-animal-avatar-1/248/fish-512.png",
 "https://cdn0.iconfinder.com/data/icons/cute-animal-avatar-1/247/cow-512.png",
 "https://cdn0.iconfinder.com/data/icons/cute-animal-avatar-1/244/sheep-512.png"]
